@@ -1,3 +1,10 @@
-hotel_name,city,agoda_link
-호텔A,부산,https://www.agoda.com/ko-kr/hotelA?cid=YOUR_AFFILIATE_ID
-호텔B,부산,https://www.agoda.com/ko-kr/hotelB?cid=YOUR_AFFILIATE_ID
+hotel_name,city,agoda_link,image_url,price,rating,pros,cons
+라한호텔 전주,전주,https://www.agoda.com/ko-kr/lahan-hotel-jeonju/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1559599238-0ab52116364c?w=1200,중상,4.5,한옥마을 중심 위치;모던한 인테리어;피트니스 무료,수영장/사우나 유료
+글로스터 호텔 전주,전주,https://www.agoda.com/ko-kr/gloucester-hotel-jeonju/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200,중,4.3,루프탑 야경;피트니스/코인세탁;객리단길 접근,한옥마을까지 도보 20분
+더 클래식 바이 호텔원,전주,https://www.agoda.com/ko-kr/the-classic-by-hotelone/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200,중,4.2,번화가 위치 편의시설 풍부;다양한 객실,한옥마을과 거리 다소 있음
+왕의지밀 한옥 호텔,전주,https://www.agoda.com/ko-kr/wangyijimil-hanok-hotel/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?w=1200,중상,4.6,프리미엄 한옥 감성;산책로;조용한 분위기,교통편 제한적일 수 있음
+라마다 바이 윈덤 전주,전주,https://www.agoda.com/ko-kr/ramada-jeonju/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200,중,4.1,시내 접근성;비즈니스 친화,주차 공간 혼잡 가능
+브라운도트 전주,전주,https://www.agoda.com/ko-kr/brown-dot-hotel-jeonju/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200,가성비,4.0,가성비 우수;편리한 주변 편의,룸 크기 편차
+N 브릿지 호텔,전주,https://www.agoda.com/ko-kr/n-bridge-hotel/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1520256862855-398228c41684?w=1200,중상,4.4,한옥마을 도보 10분;테라스 객실,주말 요금 상승
+호텔 아라리,전주,https://www.agoda.com/ko-kr/hotel-arari/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200,가성비,4.0,터미널 인근;편의시설 풍부,조식 단촐
+베스트 웨스턴 전주,전주,https://www.agoda.com/ko-kr/best-western-jeonju/hotel/jeonju-si-kr.html?cid=YOUR_AFFILIATE_ID,https://images.unsplash.com/photo-1560347876-aeef00ee58a1?w=1200,중,4.1,체인 신뢰성;비즈니스 적합,특색은 다소 약함

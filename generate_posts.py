@@ -61,6 +61,8 @@ def generate_hotel_post(hotel_name: str, city: str, agoda_link: str, image_url: 
 csv_file = 'hotels.csv'
 posts_dir = Path('posts')
 posts_dir.mkdir(exist_ok=True)
+cities_dir = Path('cities')
+cities_dir.mkdir(exist_ok=True)
 index_file = Path('index.html')
 sitemap_file = Path('sitemap.xml')
 
@@ -94,6 +96,78 @@ with open(csv_file, newline='', encoding='utf-8') as f:
 			"post_path": f"posts/{filename.name}",
 		})
 
+# Group by city to build city pages
+city_to_rows = {}
+for d in rows_data:
+	city_name = d.get('city') or ''
+	if not city_name:
+		continue
+	city_to_rows.setdefault(city_name, []).append(d)
+
+# Generate city pages like "전주 숙소 추천 Best N" with ranked article-style sections
+for city_name, items in city_to_rows.items():
+    items_sorted = items  # TODO: could sort by rating/price later
+    count = len(items_sorted)
+    title = f"{city_name} 숙소 추천, 여행을 즐길 {city_name} 인기 숙소 Best {count}"
+
+    # Build ranked sections
+    section_html_list = []
+    for idx, d in enumerate(items_sorted, start=1):
+        hotel = escape(d["hotel_name"]) 
+        img_src = d["image_url"] or PLACEHOLDER_IMG
+        post_href = f"../{d['post_path']}"
+        agoda_link = d.get("agoda_link") or ""
+        price_text = escape(str(d.get("price") or ""))
+        rating_text = str(d.get("rating") or "")
+        # Make simple stars if rating numeric
+        stars_html = ''
+        try:
+            if rating_text:
+                r = float(str(rating_text).strip())
+                rounded = max(0, min(5, int(round(r))))
+                stars_html = '★'*rounded + '☆'*(5-rounded)
+        except Exception:
+            stars_html = ''
+        meta_bits = []
+        if price_text:
+            meta_bits.append(f"가격대: {price_text}")
+        if rating_text:
+            meta_bits.append(f"평점: {escape(rating_text)} {stars_html}")
+        meta_html = ' · '.join(meta_bits)
+
+        cta_btn = f'<a class="cta-btn" href="{agoda_link}" target="_blank" rel="nofollow noopener">가격 확인 및 예약</a>' if agoda_link else ''
+
+        section_html = f"""
+<section class=\"city-section\">
+  <div class=\"rank-badge\">{idx}</div>
+  <div class=\"section-media\">
+    <a href=\"{post_href}\"><img src=\"{img_src}\" alt=\"{hotel}\" loading=\"lazy\"></a>
+  </div>
+  <div class=\"section-content\">
+    <h2><a href=\"{post_href}\">{hotel}</a></h2>
+    {f'<p class=\"meta\">{meta_html}</p>' if meta_html else ''}
+    <p class=\"blurb\">{hotel}를 {escape(city_name)}에서 즐기기 좋은 인기 숙소로 소개합니다. 자세한 후기와 장단점은 상세 페이지에서 확인해 보세요.</p>
+    <div class=\"section-ctas\">
+      {cta_btn}
+      <a class=\"cta-link\" href=\"{post_href}\">상세 보기</a>
+    </div>
+  </div>
+</section>
+""".strip()
+        section_html_list.append(section_html)
+
+    body = f"""
+<section class=\"city-intro\">
+  <h1>{escape(title)}</h1>
+  <p>{escape(city_name)} 여행을 계획하신다면 아래 인기 숙소 순위를 참고해 보세요.</p>
+</section>
+{''.join(section_html_list)}
+""".strip()
+
+    full_html = wrap_html(title, body, root_prefix='../')
+    with open(cities_dir / f"{city_name}.html", 'w', encoding='utf-8') as cf:
+        cf.write(full_html)
+
 post_links = [f'<li><a href=\"{d["post_path"]}\">{escape(d["hotel_name"])} 비교</a></li>' for d in rows_data]
 
 card_items = []
@@ -114,6 +188,7 @@ with open(index_file, 'w', encoding='utf-8') as f:
 
 urls = [f'{BASE_URL}/']
 urls += [f'{BASE_URL}/{d["post_path"]}' for d in rows_data]
+urls += [f'{BASE_URL}/cities/{escape(city)}.html' for city in city_to_rows.keys()]
 with open('sitemap.xml', 'w', encoding='utf-8') as sm:
 	sm.write('<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n')
 	sm.write('<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n')

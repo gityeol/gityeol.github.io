@@ -23,3 +23,4 @@ if ((git remote) -notcontains "origin") {
 
 git branch -M main
 Write-Host "✅ SSH remote set to $remoteUrl" -ForegroundColor Green
+
