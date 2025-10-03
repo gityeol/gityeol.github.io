@@ -98,10 +98,10 @@ post_links = [f'<li><a href=\"{d["post_path"]}\">{escape(d["hotel_name"])} ë¹„êµ
 
 card_items = []
 for d in rows_data:
-	img = f'<img src=\"{d["image_url"]}\" alt=\"{escape(d["hotel_name"]) }\" loading=\"lazy\">'
-	card_items.append(
-		f'<a class=\"card\" href=\"{d["post_path\"]}\">{img}<div class=\"card-body\"><div class=\"card-title\">{escape(d["hotel_name"])}</div></div></a>'
-	)
+	img = '<img src="{src}" alt="{alt}" loading="lazy">'.format(src=d["image_url"], alt=escape(d["hotel_name"]))
+	card_html = '<a class="card" href="{post}">{img}<div class="card-body"><div class="card-title">{title}</div></div></a>'.format(
+		post=d["post_path"], img=img, title=escape(d["hotel_name"]))
+	card_items.append(card_html)
 
 with open(index_file, 'r', encoding='utf-8') as f:
 	index_html = f.read()
