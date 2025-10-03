@@ -10,7 +10,7 @@
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: 'Pretendard', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   line-height: 1.65;
   max-width: 1080px;
   margin: auto;
@@ -19,11 +19,15 @@ body {
   background: radial-gradient(800px 400px at 50% -10%, #1f2937, transparent 60%), var(--bg);
 }
 
-header { text-align: center; margin-bottom: 24px; }
-header h1 a { color: var(--text); text-decoration: none; }
-nav { margin-top: 8px; }
-nav a { margin: 0 10px; text-decoration: none; color: var(--muted); }
-nav a:hover { color: #fff; }
+/* Header */
+.site-header { position: sticky; top: 0; backdrop-filter: blur(8px); background: rgba(15,23,42,0.75); border-bottom: 1px solid #1f2937; z-index: 20; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { font-weight: 700; letter-spacing: -0.2px; font-size: 20px; }
+.nav { display: flex; gap: 16px; }
+.nav a { padding: 8px 10px; border-radius: 8px; color: var(--muted); }
+.nav a:hover { color: var(--text); background: #171821; }
+
+.container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 16px; }
 
 main ul { list-style: none; padding: 0; }
 main ul li { margin: 10px 0; }
