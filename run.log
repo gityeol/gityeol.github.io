@@ -1,0 +1,21 @@
+﻿**********************
+Windows PowerShell 기록 시작
+시작 시간: 20251004011054
+사용자 이름: DESKTOP-0029KSQ\Y
+RunAs 사용자: DESKTOP-0029KSQ\Y
+구성 이름: 
+Machine: DESKTOP-0029KSQ (Microsoft Windows NT 10.0.19045.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\Y\Desktop\appi\gityeol_blog_template\generate_and_push.ps1
+프로세스 ID: 5060
+PSVersion: 5.1.19041.6328
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.19041.6328
+BuildVersion: 10.0.19041.6328
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 C:\Users\Y\Desktop\appi\gityeol_blog_template\run.log입니다.
+[0/7] Moving to repo dir
+Working tree dirty ??auto-stash

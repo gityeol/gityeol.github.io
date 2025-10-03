@@ -26,74 +26,21 @@
 </header>
 
 <main>
-<div id="city-nav"><a href="cities/부산.html">부산</a></div>
-<div class="filters">
-  <label>도시
-    <select id="filter-city">
-      <option value="">전체</option>
-    </select>
-  </label>
-  <label>최소 평점
-    <input type="number" id="filter-minrating" min="0" max="5" step="0.5" placeholder="0">
-  </label>
-  <label>최대 가격(숫자)
-    <input type="number" id="filter-maxprice" min="0" step="1" placeholder="0">
-  </label>
-  <button id="filter-reset">초기화</button>
-  <a href="pages/sort-rating.html">평점순</a>
-  <a href="pages/sort-price.html">가격순</a>
-  <a href="sitemap.xml">사이트맵</a>
-  <a href="cities/부산.html">부산</a>
-</div>
+<input type="search" id="search" placeholder="호텔명을 검색하세요" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;box-sizing:border-box;margin:8px 0 16px;">
 <h2>최신 호텔 비교 글</h2>
 <div id="post-grid" class="grid">
 <a class="card" data-city="부산" data-rating="0.0" data-price="0.0" href="posts/호텔A.html"><img src="https://via.placeholder.com/640x360?text=Hotel" alt="호텔A" loading="lazy"><div class="card-body"><div class="card-title">호텔A</div><div class="meta">부산</div></div></a><a class="card" data-city="부산" data-rating="0.0" data-price="0.0" href="posts/호텔B.html"><img src="https://via.placeholder.com/640x360?text=Hotel" alt="호텔B" loading="lazy"><div class="card-body"><div class="card-title">호텔B</div><div class="meta">부산</div></div></a>
 </div>
 <script>
-// Enhance cards with data attributes (populated server-side later)
-function parsePrice(text){
-  const m = (text||'').replace(/,/g,'').match(/(\d+(?:\.\d+)?)/);
-  return m? parseFloat(m[1]) : 0;
-}
-function parseRating(text){
-  const m = (text||'').match(/(\d+(?:\.\d+)?)/);
-  return m? parseFloat(m[1]) : 0;
-}
-function applyFilters(){
-  const city = document.getElementById('filter-city').value;
-  const minR = parseFloat(document.getElementById('filter-minrating').value||'0');
-  const maxP = parseFloat(document.getElementById('filter-maxprice').value||'0');
+const q = document.getElementById('search');
+q.addEventListener('input', () => {
+  const term = q.value.trim().toLowerCase();
   const cards = document.querySelectorAll('#post-grid .card');
-  cards.forEach(card=>{
-    const c = card.getAttribute('data-city')||'';
-    const r = parseFloat(card.getAttribute('data-rating')||'0');
-    const p = parseFloat(card.getAttribute('data-price')||'0');
-    let ok = true;
-    if (city && c!==city) ok=false;
-    if (!isNaN(minR) && minR>0 && r<minR) ok=false;
-    if (!isNaN(maxP) && maxP>0 && p>maxP) ok=false;
-    card.style.display = ok? '' : 'none';
+  cards.forEach(card => {
+    const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+    card.style.display = title.includes(term) ? '' : 'none';
   });
-}
-function initFilters(){
-  const grid = document.getElementById('post-grid');
-  const cards = Array.from(grid.querySelectorAll('.card'));
-  // Build city options
-  const citySel = document.getElementById('filter-city');
-  const cities = Array.from(new Set(cards.map(c=>c.getAttribute('data-city')).filter(Boolean))).sort();
-  cities.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; citySel.appendChild(o); });
-  // Bind events
-  document.getElementById('filter-minrating').addEventListener('input', applyFilters);
-  document.getElementById('filter-maxprice').addEventListener('input', applyFilters);
-  citySel.addEventListener('change', applyFilters);
-  document.getElementById('filter-reset').addEventListener('click', ()=>{
-    citySel.value='';
-    document.getElementById('filter-minrating').value='';
-    document.getElementById('filter-maxprice').value='';
-    applyFilters();
-  });
-}
-document.addEventListener('DOMContentLoaded', initFilters);
+});
 </script>
 </main>
 

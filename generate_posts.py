@@ -9,10 +9,10 @@ PLACEHOLDER_IMG = 'https://via.placeholder.com/640x360?text=Hotel'
 ANALYTICS_SNIPPET = """
 <!-- Analytics placeholders -->
 <!-- Google Analytics (replace with real GA tag) -->
-<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+<!-- <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX\"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config','G-XXXXXXX');</script> -->
 <!-- Naver Analytics (replace with real script) -->
-<!-- <script type="text/javascript">/* Naver Analytics */</script> -->
+<!-- <script type=\"text/javascript\">/* Naver Analytics */</script> -->
 """.strip()
 
 
@@ -27,7 +27,6 @@ def generate_hotel_post(hotel_name: str, city: str, agoda_link: str, image_url: 
 	link_html = f'<p class=\"cta\"><a href=\"{agoda_link}\" target=\"_blank\" rel=\"nofollow noopener\">Agoda에서 가격 확인</a></p>' if agoda_link else ''
 	img_html = f'<p><img src=\"{img_src}\" alt=\"{escape(hotel_name)}\" loading=\"lazy\"></p>'
 	price_html = f'<p class=\"price\">가격대: {escape(price)}</p>' if price else ''
-	# normalize rating to stars if numeric
 	stars_html = ''
 	try:
 		if rating:
@@ -63,10 +62,6 @@ csv_file = 'hotels.csv'
 posts_dir = Path('posts')
 posts_dir.mkdir(exist_ok=True)
 index_file = Path('index.html')
-cities_dir = Path('cities')
-cities_dir.mkdir(exist_ok=True)
-pages_dir = Path('pages')
-pages_dir.mkdir(exist_ok=True)
 sitemap_file = Path('sitemap.xml')
 
 rows_data = []
@@ -99,118 +94,31 @@ with open(csv_file, newline='', encoding='utf-8') as f:
 			"post_path": f"posts/{filename.name}",
 		})
 
-# Build list items for legacy UL
-post_links = [f'<li><a href="{d["post_path"]}">{escape(d["hotel_name"])} 비교</a></li>' for d in rows_data]
+post_links = [f'<li><a href=\"{d["post_path"]}\">{escape(d["hotel_name"])} 비교</a></li>' for d in rows_data]
 
-# Build card grid HTML with data attributes
 card_items = []
 for d in rows_data:
-	img = f'<img src="{d["image_url"]}" alt="{escape(d["hotel_name"]) }" loading="lazy">'
-	# compute numeric helpers
-	def _rating_num(x):
-		try:
-			return float(str(x)) if str(x).strip() else 0.0
-		except Exception:
-			return 0.0
-	def _price_num(x):
-		m = re.search(r"(\d+(?:\.\d+)?)", (x or '').replace(',', ''))
-		return float(m.group(1)) if m else 0.0
-	price_num = _price_num(d["price"]) if d["price"] else 0.0
-	rating_num = _rating_num(d["rating"]) if d["rating"] else 0.0
-	price_html = f'<div class="meta price">{escape(d["price"])}</div>' if d["price"] else ''
-	rating_html = ''
-	try:
-		if d["rating"]:
-			r = float(str(d["rating"]))
-			rounded = max(0, min(5, int(round(r))))
-			rating_html = '<div class="meta rating">' + '★'*rounded + '☆'*(5-rounded) + f' ({escape(str(d["rating"]))})</div>'
-	except Exception:
-		rating_html = f'<div class="meta rating">{escape(str(d["rating"]))}</div>' if d["rating"] else ''
-	city_meta = f'<div class="meta">{escape(d["city"])}</div>' if d["city"] else ''
+	img = f'<img src=\"{d["image_url"]}\" alt=\"{escape(d["hotel_name"]) }\" loading=\"lazy\">'
 	card_items.append(
-		f'<a class="card" data-city="{escape(d["city"])}" data-rating="{rating_num}" data-price="{price_num}" href="{d["post_path"]}">{img}<div class="card-body"><div class="card-title">{escape(d["hotel_name"])}</div>{city_meta}{price_html}{rating_html}</div></a>'
+		f'<a class=\"card\" href=\"{d["post_path\"]}\">{img}<div class=\"card-body\"><div class=\"card-title\">{escape(d["hotel_name"])}</div></div></a>'
 	)
 
-# Inject into index.html
 with open(index_file, 'r', encoding='utf-8') as f:
 	index_html = f.read()
 
-# Add city nav at top of main
-cities = {}
-for d in rows_data:
-	if d["city"]:
-		cities.setdefault(d["city"], []).append(d)
-
-city_links = [f'<a href="cities/{city.replace(" ", "_")}.html">{escape(city)}</a>' for city in sorted(cities.keys())]
-if city_links:
-	if re.search(r'<div id="city-nav">', index_html):
-		index_html = re.sub(r'(<div id="city-nav">)\s*(.*?)\s*(</div>)', lambda m: f"{m.group(1)}{' | '.join(city_links)}{m.group(3)}", index_html, flags=re.S)
-	else:
-		index_html = index_html.replace('<main>', f"<main>\n<div id=\"city-nav\">{' | '.join(city_links)}</div>")
-
-# Replace UL content
-index_html = re.sub(r'(<ul id="post-list">)\s*(.*?)\s*(</ul>)', lambda m: f"{m.group(1)}\n{''.join(post_links)}\n{m.group(3)}", index_html, flags=re.S)
-# Replace card grid content
-index_html = re.sub(r'(<div id="post-grid"[^>]*>)\s*(.*?)\s*(</div>)', lambda m: f"{m.group(1)}\n{''.join(card_items)}\n{m.group(3)}", index_html, flags=re.S)
-
-# Inject analytics snippet in head if missing
-if 'Analytics placeholders' not in index_html:
-	index_html = index_html.replace('</head>', ANALYTICS_SNIPPET + '\n</head>')
+index_html = re.sub(r'(<ul id=\"post-list\">)\s*(.*?)\s*(</ul>)', lambda m: f"{m.group(1)}\n{''.join(post_links)}\n{m.group(3)}", index_html, flags=re.S)
+index_html = re.sub(r'(<div id=\"post-grid\"[^>]*>)\s*(.*?)\s*(</div>)', lambda m: f"{m.group(1)}\n{''.join(card_items)}\n{m.group(3)}", index_html, flags=re.S)
 
 with open(index_file, 'w', encoding='utf-8') as f:
 	f.write(index_html)
 
-# City pages
-for city, items in sorted(cities.items()):
-	slug = city.replace(' ', '_')
-	city_path = Path('cities') / f"{slug}.html"
-	cards = []
-	for d in items:
-		img = f'<img src="{d["image_url"]}" alt="{escape(d["hotel_name"]) }" loading="lazy">'
-		cards.append('<a class="card" href="../{post}">{img}<div class="card-body"><div class="card-title">{title}</div></div></a>'.format(
-			post=d["post_path"], img=img, title=escape(d["hotel_name"])) )
-	body = f"<h2>{escape(city)} 호텔 모음</h2><div class=\"grid\">{''.join(cards)}</div>"
-	html = wrap_html(f"{city} 호텔 모음", body, root_prefix='../')
-	with open(city_path, 'w', encoding='utf-8') as c:
-		c.write(html)
-
-# Sort pages
-def rating_key(v: dict) -> float:
-	try:
-		return float(v.get('rating') or 0)
-	except Exception:
-		return 0.0
-
-def price_key(v: dict) -> float:
-	# very naive: extract leading digits
-	m = re.search(r"(\d+[\.]?\d*)", (v.get('price') or '').replace(',', ''))
-	return float(m.group(1)) if m else 0.0
-
-sorted_by_rating = sorted(rows_data, key=rating_key, reverse=True)
-sorted_by_price = sorted(rows_data, key=price_key)
-
-for name, items in (('sort-rating.html', sorted_by_rating), ('sort-price.html', sorted_by_price)):
-	cards = []
-	for d in items:
-		img = f'<img src="{d["image_url"]}" alt="{escape(d["hotel_name"]) }" loading="lazy">'
-		cards.append('<a class="card" href="../{post}">{img}<div class="card-body"><div class="card-title">{title}</div></div></a>'.format(
-			post=d["post_path"], img=img, title=escape(d["hotel_name"])) )
-	label = '평점 순' if 'rating' in name else '가격 순'
-	body = f"<h2>{label} 호텔 모음</h2><div class=\"grid\">{''.join(cards)}</div>"
-	html = wrap_html(label, body, root_prefix='../')
-	with open(Path('pages') / name, 'w', encoding='utf-8') as pf:
-		pf.write(html)
-
-# Write sitemap
 urls = [f'{BASE_URL}/']
 urls += [f'{BASE_URL}/{d["post_path"]}' for d in rows_data]
-urls += [f'{BASE_URL}/cities/{city.replace(" ", "_")}.html' for city in cities.keys()]
-urls += [f'{BASE_URL}/pages/sort-rating.html', f'{BASE_URL}/pages/sort-price.html']
 with open('sitemap.xml', 'w', encoding='utf-8') as sm:
-	sm.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-	sm.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
+	sm.write('<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n')
+	sm.write('<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n')
 	for u in urls:
 		sm.write(f'<url><loc>{u}</loc></url>\n')
 	sm.write('</urlset>')
 
-print('모든 글 생성 완료! (카드/도시/정렬/사이트맵/애널리틱스/필터 반영)')
+print('모든 글 생성 완료! (검색창 전용, 사이트맵=메인+포스트)')
