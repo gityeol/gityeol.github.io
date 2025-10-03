@@ -6,6 +6,12 @@
 <title>호텔 비교 블로그 | Agoda 어필리에이트</title>
 <meta name="description" content="지역별 인기 호텔 비교, 장단점 분석, Agoda 예약 링크 제공">
 <link rel="stylesheet" href="style.css">
+<!-- Analytics placeholders -->
+<!-- Google Analytics (replace with real GA tag) -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config','G-XXXXXXX');</script> -->
+<!-- Naver Analytics (replace with real script) -->
+<!-- <script type="text/javascript">/* Naver Analytics */</script> -->
 </head>
 <body>
 <header>
@@ -20,6 +26,7 @@
 </header>
 
 <main>
+<div id="city-nav"><a href="cities/부산.html">부산</a></div>
 <div class="filters">
   <label>도시
     <select id="filter-city">
@@ -40,14 +47,7 @@
 </div>
 <h2>최신 호텔 비교 글</h2>
 <div id="post-grid" class="grid">
-  <!-- 자동 생성 카드가 들어갑니다 -->
-  <noscript>
-    <ul id="post-list">
-      <li><a href="posts/호텔A.html">호텔A 비교</a></li><li><a href="posts/호텔B.html">호텔B 비교</a></li>
-    </ul>
-  </noscript>
-  <ul id="post-list" style="display:none"></ul>
-  <!-- JS 없이도 서버가 <ul id="post-list">를 갱신하므로, 빌드 시 카드를 서버에서 채웁니다. -->
+<a class="card" data-city="부산" data-rating="0.0" data-price="0.0" href="posts/호텔A.html"><img src="https://via.placeholder.com/640x360?text=Hotel" alt="호텔A" loading="lazy"><div class="card-body"><div class="card-title">호텔A</div><div class="meta">부산</div></div></a><a class="card" data-city="부산" data-rating="0.0" data-price="0.0" href="posts/호텔B.html"><img src="https://via.placeholder.com/640x360?text=Hotel" alt="호텔B" loading="lazy"><div class="card-body"><div class="card-title">호텔B</div><div class="meta">부산</div></div></a>
 </div>
 <script>
 // Enhance cards with data attributes (populated server-side later)

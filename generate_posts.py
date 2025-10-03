@@ -167,7 +167,8 @@ for city, items in sorted(cities.items()):
 	cards = []
 	for d in items:
 		img = f'<img src="{d["image_url"]}" alt="{escape(d["hotel_name"]) }" loading="lazy">'
-		cards.append(f'<a class=\"card\" href=\"../{d["post_path\"]}\">{img}<div class=\"card-body\"><div class=\"card-title\">{escape(d["hotel_name"])}</div></div></a>')
+		cards.append('<a class="card" href="../{post}">{img}<div class="card-body"><div class="card-title">{title}</div></div></a>'.format(
+			post=d["post_path"], img=img, title=escape(d["hotel_name"])) )
 	body = f"<h2>{escape(city)} 호텔 모음</h2><div class=\"grid\">{''.join(cards)}</div>"
 	html = wrap_html(f"{city} 호텔 모음", body, root_prefix='../')
 	with open(city_path, 'w', encoding='utf-8') as c:
@@ -192,7 +193,8 @@ for name, items in (('sort-rating.html', sorted_by_rating), ('sort-price.html', 
 	cards = []
 	for d in items:
 		img = f'<img src="{d["image_url"]}" alt="{escape(d["hotel_name"]) }" loading="lazy">'
-		cards.append(f'<a class=\"card\" href=\"../{d["post_path\"]}\">{img}<div class=\"card-body\"><div class=\"card-title\">{escape(d["hotel_name"])}</div></div></a>')
+		cards.append('<a class="card" href="../{post}">{img}<div class="card-body"><div class="card-title">{title}</div></div></a>'.format(
+			post=d["post_path"], img=img, title=escape(d["hotel_name"])) )
 	label = '평점 순' if 'rating' in name else '가격 순'
 	body = f"<h2>{label} 호텔 모음</h2><div class=\"grid\">{''.join(cards)}</div>"
 	html = wrap_html(label, body, root_prefix='../')

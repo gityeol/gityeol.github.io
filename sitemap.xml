@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>https://gityeol.github.io/</loc></url>
+<url><loc>https://gityeol.github.io/posts/호텔A.html</loc></url>
+<url><loc>https://gityeol.github.io/posts/호텔B.html</loc></url>
+<url><loc>https://gityeol.github.io/cities/부산.html</loc></url>
+<url><loc>https://gityeol.github.io/pages/sort-rating.html</loc></url>
+<url><loc>https://gityeol.github.io/pages/sort-price.html</loc></url>
 </urlset>
